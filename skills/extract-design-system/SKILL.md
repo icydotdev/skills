@@ -133,6 +133,35 @@ curl -s -X POST $API/api/complete -H 'content-type: application/json' \
 The dashboard server keeps running so the user can keep viewing it; mention they
 can stop it with `lsof -ti:3719 | xargs kill` (use the real port if different).
 
+## 7. Apply any "Replace in codebase" requests
+
+While you worked, the user may have clicked **Replace** on components in the
+dashboard. Drain that queue before you finish your turn:
+
+```bash
+curl -s $API/api/requests?status=pending
+```
+
+For each pending request:
+
+1. First check git is clean (`git status --porcelain`). If dirty, warn the user
+   and ask before editing their files — replacement is the only destructive step.
+2. Find where the original component is imported/used across the codebase and
+   repoint those imports to the new `ui/` version
+   (e.g. `import { Button } from "@/components/Button"` →
+   `import { Button } from "@/ui/components/Button"`). Only touch the files the
+   request included. Keep the original file unless the user wants it deleted.
+3. Show the user a short summary of what changed.
+4. Mark it handled:
+
+```bash
+curl -s -X POST $API/api/request-done -H 'content-type: application/json' -d '{"id":"<request id>"}'
+```
+
+Note: you only drain this queue while your turn is running. If the user clicks
+Replace later, they can just ask you to "replace <Component> usages" and you do
+the same thing directly — no dashboard needed.
+
 ## Tips
 
 - POST components one at a time, as you finish analysing each, so the user
