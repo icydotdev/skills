@@ -25,26 +25,33 @@ npx -y @icydotdev/lumen@latest --serve
   POST progress. If it errors with "React was not found", tell the user this
   isn't a React project and stop.
 
-## 0.5 Ask what to generate (before scanning)
+## 0.5 Confirm the plan (default = full setup)
 
-Ask the user a quick **multi-select** question (use your question/multiselect UI)
-so you only scaffold what they want:
+By **default, set everything up** — don't make the user opt in to the good stuff.
+Ask ONE confirming multi-select question, with everything **pre-selected**:
 
-> Which artifacts should I generate for each component?
-> - Component file (`.tsx`) — always
-> - Unit tests (`.test.tsx`)
-> - Accessibility tests (axe, inside the test file)
-> - Storybook stories (`.stories.tsx`)
+> I'll extract your design system and set up the full toolchain. Adjust if you like:
+> - [x] Unified components → `ui/`
+> - [x] Unit + behaviour tests
+> - [x] Accessibility tests (axe) — and run them
+> - [x] Storybook stories + install & configure Storybook
+> - [x] Install the test runner + testing-library + jest-axe if missing
 
-Default to all selected. Also ask, as a second question if any test/story option
-is chosen and the deps are missing:
+If the user just accepts (or doesn't care), proceed with **all of it**. Only skip
+what they explicitly uncheck.
 
-> The tests/stories need dev deps not yet installed
-> (`@testing-library/react`, `jest-axe`, `@storybook/react`, a test runner).
-> Install them now, or just write the files and let me install later?
+Then **install missing dev deps up front** (so tests/Storybook actually run):
 
-Honour the answers in step 5 — skip files for unchecked artifacts, and only run
-`npm install` for deps if they said yes. Keep the rest of the flow the same.
+- Test runner: prefer `vitest` (+ `@vitejs/plugin-react`, `jsdom`) unless the
+  project already uses `jest`.
+- `@testing-library/react`, `@testing-library/jest-dom`, `jest-axe`,
+  `@types/jest-axe`.
+- Storybook: run its installer (`npx storybook@latest init --yes`) if there's no
+  `.storybook/`; otherwise just add stories.
+- Add `test` and `storybook` scripts to package.json if missing.
+
+Use the project's package manager. Tell the user what you're installing. If an
+install genuinely fails, note it and carry on writing files.
 
 ## 1. Announce the scan
 
@@ -136,6 +143,35 @@ Plus, once, at `ui/`:
 
 `ui/` is **net-new and additive**. Do NOT modify the user's existing files
 unless they explicitly ask you to replace usages.
+
+## 5.5 Run the tests & accessibility checks
+
+Once the deps are installed and files written, **run the tests** (including the
+axe a11y checks) so the dashboard reflects real status, not `none`/`—`:
+
+```bash
+# vitest example
+npx vitest run
+```
+
+For each component, re-POST its ComponentInfo with the results so the TESTS,
+COVERAGE and A11Y columns fill in:
+
+```bash
+curl -s -X POST $API/api/component -H 'content-type: application/json' -d '{
+  "name": "Button", "filePath": "...", "variants": [...], "props": [...],
+  "colorValues": [...], "spacingValues": [...],
+  "hasTests": true, "hasStory": true,
+  "a11yScore": 100, "testCoverage": 92
+}'
+```
+
+- `a11yScore`: 100 if axe found no violations for that component, lower if it did
+  (and fix what you reasonably can).
+- `testCoverage`: from the coverage report if you ran with coverage; otherwise
+  leave the previous value.
+
+If the user unchecked tests/a11y in step 0.5, skip this step.
 
 ## 6. Finish
 
