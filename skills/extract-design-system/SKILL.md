@@ -25,6 +25,27 @@ npx -y @icydotdev/lumen@latest --serve
   POST progress. If it errors with "React was not found", tell the user this
   isn't a React project and stop.
 
+## 0.5 Ask what to generate (before scanning)
+
+Ask the user a quick **multi-select** question (use your question/multiselect UI)
+so you only scaffold what they want:
+
+> Which artifacts should I generate for each component?
+> - Component file (`.tsx`) — always
+> - Unit tests (`.test.tsx`)
+> - Accessibility tests (axe, inside the test file)
+> - Storybook stories (`.stories.tsx`)
+
+Default to all selected. Also ask, as a second question if any test/story option
+is chosen and the deps are missing:
+
+> The tests/stories need dev deps not yet installed
+> (`@testing-library/react`, `jest-axe`, `@storybook/react`, a test runner).
+> Install them now, or just write the files and let me install later?
+
+Honour the answers in step 5 — skip files for unchecked artifacts, and only run
+`npm install` for deps if they said yes. Keep the rest of the flow the same.
+
 ## 1. Announce the scan
 
 ```bash
