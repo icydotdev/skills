@@ -15,20 +15,20 @@ Do this **before** starting the dashboard. The dashboard opens a browser tab and
 steals focus from the terminal, so you must ask while the user is still looking
 at their CLI.
 
-Unified components → `ui/` always happen — that's the core, not a choice. Ask
-only about the three add-ons. **Default = all ON.** If your question UI can't
-pre-check boxes, say so in the prompt and treat an empty/Submit-with-nothing
-answer as **all selected** — never proceed with nothing:
+Unified components → `ui/` always happen — that's the core. Ask a **single-select**
+question so the default is unambiguous (the first option is pre-highlighted):
 
-> I'll extract your design system into `ui/`. Which extras should I add?
-> (all included by default — submit to accept, or deselect any)
-> - Unit + behaviour tests
-> - Accessibility tests (axe) — and run them
-> - Storybook stories + install & configure Storybook
+> How thorough should I be? (extract into `ui/` either way)
+> 1. Full setup (recommended) — components + unit/behaviour tests + a11y (axe,
+>    and run them) + Storybook stories, installing any missing dev deps
+> 2. Customise — let me pick which of tests / a11y / Storybook to include
+> 3. Components only — just the unified `ui/` components, no tests or Storybook
 
-Installing the needed dev deps (test runner, testing-library, jest-axe,
-Storybook) is implied by whichever of the three are kept. Rule: a bare "Submit" /
-no changes = **all three**. Only skip what the user explicitly removes.
+- Default to **Full setup**.
+- If they pick **Customise**, follow up with a multi-select for the three add-ons
+  (tests, a11y, Storybook).
+- Installing the needed dev deps (test runner, testing-library, jest-axe,
+  Storybook) is implied by whatever add-ons end up included.
 
 ## 0.5 Start the dashboard (after the user has answered)
 
