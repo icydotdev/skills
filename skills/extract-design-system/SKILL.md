@@ -9,9 +9,30 @@ You infer the design system already hiding in a React/Next.js codebase and
 scaffold a clean `ui/` folder, while the **Lumen** dashboard shows it happening
 live. You do the thinking; Lumen is the engine + visualiser.
 
-## 0. Start the dashboard (do this first)
+## 0. Confirm the plan FIRST — before opening anything
 
-Run the Lumen engine **in the background** so it keeps serving while you work:
+Do this **before** starting the dashboard. The dashboard opens a browser tab and
+steals focus from the terminal, so you must ask while the user is still looking
+at their CLI.
+
+Unified components → `ui/` always happen — that's the core, not a choice. Ask
+only about the three add-ons. **Default = all ON.** If your question UI can't
+pre-check boxes, say so in the prompt and treat an empty/Submit-with-nothing
+answer as **all selected** — never proceed with nothing:
+
+> I'll extract your design system into `ui/`. Which extras should I add?
+> (all included by default — submit to accept, or deselect any)
+> - Unit + behaviour tests
+> - Accessibility tests (axe) — and run them
+> - Storybook stories + install & configure Storybook
+
+Installing the needed dev deps (test runner, testing-library, jest-axe,
+Storybook) is implied by whichever of the three are kept. Rule: a bare "Submit" /
+no changes = **all three**. Only skip what the user explicitly removes.
+
+## 0.5 Start the dashboard (after the user has answered)
+
+Now run the Lumen engine **in the background** so it serves while you work:
 
 ```bash
 npx -y @icydotdev/lumen@latest --serve
@@ -21,26 +42,13 @@ npx -y @icydotdev/lumen@latest --serve
   `✨ Lumen ready · http://localhost:3719`. **Read the port from that banner** —
   it may differ from 3719 if the port was busy. Use that base URL (call it `$API`)
   for every POST below.
-- It opens the dashboard in the browser on a loading screen. It fills in as you
-  POST progress. If it errors with "React was not found", tell the user this
-  isn't a React project and stop.
+- It opens the dashboard in the browser on a loading screen, which fills in as you
+  POST progress. If it errors with "React was not found", tell the user this isn't
+  a React project and stop.
 
-## 0.5 Confirm the plan (default = full setup)
+## 0.6 Install missing dev deps up front
 
-By **default, set everything up** — don't make the user opt in to the good stuff.
-Ask ONE confirming multi-select question, with everything **pre-selected**:
-
-> I'll extract your design system and set up the full toolchain. Adjust if you like:
-> - [x] Unified components → `ui/`
-> - [x] Unit + behaviour tests
-> - [x] Accessibility tests (axe) — and run them
-> - [x] Storybook stories + install & configure Storybook
-> - [x] Install the test runner + testing-library + jest-axe if missing
-
-If the user just accepts (or doesn't care), proceed with **all of it**. Only skip
-what they explicitly uncheck.
-
-Then **install missing dev deps up front** (so tests/Storybook actually run):
+So tests and Storybook actually run (skip anything the user deselected):
 
 - Test runner: prefer `vitest` (+ `@vitejs/plugin-react`, `jsdom`) unless the
   project already uses `jest`.
