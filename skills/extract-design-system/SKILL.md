@@ -54,8 +54,16 @@ So tests and Storybook actually run (skip anything the user deselected):
   project already uses `jest`.
 - `@testing-library/react`, `@testing-library/jest-dom`, `jest-axe`,
   `@types/jest-axe`.
-- Storybook: run its installer (`npx storybook@latest init --yes`) if there's no
-  `.storybook/`; otherwise just add stories.
+- Storybook: if there's no `.storybook/`, run `npx storybook@latest init --yes`,
+  then **fix it up so it sees your work, not the boilerplate**:
+  - Edit `.storybook/main.*` so the `stories` glob includes the generated folder,
+    e.g. add `"../ui/**/*.stories.@(js|jsx|ts|tsx)"` (use the correct relative
+    path from `.storybook/` to `ui/`).
+  - **Delete the example boilerplate** the installer creates (the `stories/`
+    folder with `Button.stories`, `Header.stories`, `Page.stories`, `Configure.mdx`,
+    assets) — it clutters the sidebar and hides your components.
+  - Keep story titles as `Components/<Name>` so deep links resolve to
+    `?path=/docs/components-<name>--docs`.
 - Add `test` and `storybook` scripts to package.json if missing.
 
 Use the project's package manager. Tell the user what you're installing. If an
