@@ -1,7 +1,14 @@
+<p align="center">
+  <img src="./assets/banner.svg" alt="Lumen — AI-powered design system workbench for React" width="100%" />
+</p>
+
 # @icydotdev/skills
 
 Agent skills for the [@icydotdev](https://github.com/icydotdev) suite, installable
-with the [`skills`](https://skills.sh) CLI.
+with the [`skills`](https://skills.sh) CLI. The flagship is
+**`react-design-system-extractor`** — your AI agent extracts the design system
+from an existing React/Next.js codebase, visualised live in the
+[Lumen](https://github.com/icydotdev/lumen) dashboard.
 
 ## Install
 
