@@ -1,13 +1,18 @@
 ---
-name: extract-design-system
-description: Infer a React project's implicit design system and scaffold a structured ui/ folder — unified components, design tokens, Storybook stories, and accessibility + unit tests — while a live Lumen dashboard visualises progress. Use when the user asks to extract, infer, scaffold, organise, or set up a design system / component library / UI tokens from an existing React or Next.js codebase.
+name: react-design-system-extractor
+description: Extract the design system hiding in an existing React or Next.js codebase — infer design tokens, unify components into a clean ui/ folder with Storybook stories and accessibility + unit tests — and watch it happen live in the Lumen dashboard. Use when the user wants to extract, infer, scaffold, organise, consolidate, or set up a design system, component library, or UI tokens from existing React/Next.js code.
 ---
 
-# Extract Design System
+# React Design System Extractor
 
-You infer the design system already hiding in a React/Next.js codebase and
-scaffold a clean `ui/` folder, while the **Lumen** dashboard shows it happening
-live. You do the thinking; Lumen is the engine + visualiser.
+You extract the design system already hiding in an existing React/Next.js codebase
+and scaffold a clean `ui/` folder. The work is visualised live in **Lumen** — the
+local dashboard this skill opens. You do the thinking; Lumen is the engine +
+visualiser.
+
+When you begin, tell the user plainly: *"I'll extract your design system and open
+**Lumen** — the live dashboard that visualises this."* — so the Lumen window and
+the `@icydotdev/lumen` package aren't a surprise.
 
 ## 0. Confirm the plan FIRST — before opening anything
 
